@@ -1,0 +1,419 @@
+getData_control46_IeXn9y: |
+  if (!elem) {
+    return;
+  }
+  var data = {
+    content: [],
+    checkSum: [] //var content = [];
+
+  };
+  var sum = 0;
+  var lis = elem.querySelector("#businessDepartment").querySelectorAll("li");
+  [].forEach.call(lis, function (li, index) {
+    var text = [];
+    var input = li.querySelector("input");
+    var checked = $(input).prop("checked"); //获取选择了多少个业务部门
+
+    if (true == checked) {
+      sum++;
+    }
+
+    text.push(checked);
+    text.push(li.querySelector("input").getAttribute("val"));
+    data.content.push(text);
+  });
+  data.checkSum.push(sum);
+  return data;
+doAction_uiControl49_Q2Z6nE: "if (data.eventType == 'AndroidBack') {\n  if (top.EAPI.isAndroid()) {\n    //刷新\n    top.yspCheckIn.isRefresh(true);\n  }\n\n  ysp.customHelper.AndroidBackURL = \"http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html\";\n  ysp.customHelper.AndroidBackModel = 'customerWorkspace';\n  ysp.customHelper.AndroidBackFlag = 'destination';\n}\nif ('back' == data.eventType) {\n  debugger;\n\n  if (!top.EAPI.isAndroid()) {\n    ysp.appMain.back();\n    ysp.customHelper.BackReload('http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html', 'customerWorkspace');\n  } else {\n    //刷新\n    ysp.appMain.back();\n    ysp.customHelper.AndroidBackFn(); //top.yspCheckIn.isRefresh(true); \t\t\n  }\n}\nif (\"click\" == data.eventType) {\n  var index = data.dataCustom;\n  elem.querySelector(\"#businessDepartment\").querySelectorAll(\"li\")[index].querySelector(\"input\").click();\n}\nif (\"chose\" == data.eventType) {\n  elem.querySelector(\".work-tit\").querySelector(\"a\").click();\n}\nif (\"close\" == data.eventType) {\n  elem.querySelector(\".b-box\").querySelector(\".qx\").click();\n}\nif (\"save\" == data.eventType) {\n  elem.querySelector(\"#confirmOperatingDepartment\").click();\n}\n"
+getTemplate_uiControl49_Q2Z6nE: "import {\n  Component\n} from 'react';\nimport {\n  CustomHeader,\n  Dialog,\n} from 'ysp-custom-components';\nexport default class extends Component {\n  componentDidMount(){\n    var _this = this;\n \_ \_//const {customHandler} = _this.props;\n \_ \_var customHandler = _this.props.customHandler;\n    customHandler({\n      eventType:'AndroidBack'\n    })\n  } \n  constructor(props) {\n    super(props);\n    this.state={\n      open: false\n    }\n  }\n  handlerClick(e){\n    var target = e.target;\n    var index = target.dataset.index;\n    var handler = this.props.customHandler;\n    if(handler){\n      handler({\n        data: index,\n        eventType: 'click'\n      })\n    }\n  }\n  save(e){\n    this.setState({\n      open: !this.state.open\n    })\n    var handler = this.props.customHandler;\n    if(handler){\n      handler({\n        eventType: 'save'\n      })\n    }\n  }\n  render = () => {\n    var content = this.props.customData && this.props.customData.content || [];\n    var checkSum = this.props.customData && this.props.customData.checkSum || 0;\n    return (\n      <div>\n      \t<CustomHeader \n         data={{centerText:\"总结内容\"}}\n         backIsShow={true}\n         back={(e)=>{\n            var handler = this.props.customHandler;\n            if (handler) {\n              handler({\n                eventType: 'back'\n              });\n            }\n         }} \n         filterIsShow={false}\n         choseIsShow = {true}\n         chose = {(e)=>{\n          this.setState({\n            open: !this.state.open\n          })\n          var handler = this.props.customHandler;\n          if (handler) {\n            handler({\n              eventType: 'chose'\n            });\n          }  \n         }}\n         filter={()=>{console.info(\"header filter ...\")}}\n      />\n        {\n          this.state.open &&\n            <Dialog className=\"ysp-workSummary-dialog\">\n            \t<CustomHeader\n               data={{centerText:\"业务部门\"}}\n               backIsShow={true}\n               back={(e)=>{\n                  this.setState({\n                    open: !this.state.open\n                  })\n                  var handler = this.props.customHandler;\n                  if (handler) {\n                    handler({\n                      eventType: 'close'\n                    });\n                  }\n               }} \n               filterIsShow={false}\n               filter={()=>{console.info(\"header filter ...\")}}\n            \t/>\n              \n              <div style={{\"marginTop\":\"43px\"}}>\n                {\n                  content.length >0 ? \n                  content.map((items,index)=>{\n                    return(\n                    \t<div className=\"ysp-workSummary-business\" >\n                        <span className={items[0] == true ? \"ysp-workSummary-checked\" : \"\"} onClick={this.handlerClick.bind(this)} data-index={index}></span>\n                        <span>{items[1]}</span>\n                    \t</div>\n                    );\n                    \n                  }) : <div>无数据</div>\n                }\n              </div>\n              \n              <div className=\"ysp-workSummary-yes\">\n                <span onClick={this.save.bind(this)}>确认({checkSum})</span>\n              </div>\n            </Dialog>\n        }\n      </div>\n      \n    );\n  }\n}"
+getData_control52_eQ7d8h: "if (!elem) {\n  return;\n}\nvar data = {\n  select: [],\n  //下拉选项\n  date: [],\n  //时间\n  textSum: [],\n  huaweiFD: {\n    huaweiFDFlag: [],\n    huaweiFDText: []\n  },\n  huaweiPJ: {\n    huaweiPJFlag: [],\n    huaweiPJText: []\n  },\n  huaweiStore: {\n    huaweiStoreFlag: [],\n    huaweiStoreText: []\n  },\n  samsung: {\n    samsungFlag: [],\n    samsungText: []\n  },\n  distribution: {\n    distributionFlag: [],\n    distributionText: []\n  },\n  others: {\n    othersFlag: [],\n    othersText: []\n  },\n  problemValue: [],\n  content: [],\n  flag: [],\n  file: [],\n  searchList: '',\n  No: '',\n  boxId: \"\",\n  personIndex: \"\"\n};\nvar elem = elem.ownerDocument;\nvar win = elem.defaultView;\nvar options = elem.querySelector(\"#workSummaryPlanType\").querySelectorAll(\"option\");\nvar value;\nfor (var i = 0; i < options.length; i++) {\n  value = options[i].textContent;\n  data.select.push(value);\n} //时间选择\nvar date = elem.querySelector(\"#workSummaryPlanTimeLable\").querySelector(\"span\").textContent;\ndata.date.push(date);\nvar text = elem.querySelectorAll(\".con-box\")[0].querySelector(\"textarea\").value;\ndata.textSum.push(text);\nvar textAreas = elem.querySelector(\"#textareaDivs\").querySelectorAll(\"div\");\nvar huaweiFD = \"\";\nvar huaweiPJ = \"\";\nvar huaweiStore = \"\";\nvar samsung = \"\";\nvar distribution = \"\";\nvar others = \"\";\nfor (var i = 0; i < textAreas.length; i++) {\n  var val = textAreas[i].querySelector(\"textarea\").getAttribute(\"val\");\n\n  if (\"华为FD业务事业部\" == val) {\n    huaweiFD = \"华为FD业务事业部\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.huaweiFD.huaweiFDFlag.push(huaweiFD);\n    data.huaweiFD.huaweiFDText.push(text);\n  } else if (\"融合及配件业务事业部\" == val) {\n    huaweiPJ = \"融合及配件业务事业部\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.huaweiPJ.huaweiPJFlag.push(huaweiPJ);\n    data.huaweiPJ.huaweiPJText.push(text);\n  } else if (\"华为体验店业务事业部\" == val) {\n    huaweiStore = \"华为体验店业务事业部\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.huaweiStore.huaweiStoreFlag.push(huaweiStore);\n    data.huaweiStore.huaweiStoreText.push(text);\n  } else if (\"三星业务事业部\" == val) {\n    samsung = \"三星业务事业部\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.samsung.samsungFlag.push(samsung);\n    data.samsung.samsungText.push(text);\n  } else if (\"大客户业务部\" == val) {\n    distribution = \"大客户业务部\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.distribution.distributionFlag.push(distribution);\n    data.distribution.distributionText.push(text);\n  } else if (\"其他\" == val) {\n    others = \"其他\";\n    var text = textAreas[i].querySelector(\"textarea\").value;\n    data.others.othersFlag.push(others);\n    data.others.othersText.push(text);\n  }\n} //问题及所属资源\nvar problemValue = elem.querySelector(\".problem-con\") && elem.querySelector(\".problem-con\").querySelector(\"textarea\").value;\ndata.problemValue.push(problemValue); //选项\nvar spans = elem.querySelectorAll('#lableTabs span');\n[].forEach.call(spans, function (span, index) {\n  var spanData = [];\n  var spanClass = span.getAttribute(\"class\");\n\n  if (null == spanClass) {\n    spanData.push(\"true\");\n  } else {\n    if (spanClass.indexOf(\"unchecked\") < 0) {\n      spanData.push(\"true\");\n    } else {\n      spanData.push(\"false\");\n    }\n  }\n\n  spanData.push(span.textContent);\n  data.content.push(spanData);\n}); //判断是否有更多\nvar as = elem.querySelectorAll('#lableTabs span');\nvar flag = [];\nvar more = \"false\";\nif (as.length > 6) {\n  more = \"true\";\n}\ndata.flag.push(more); //上传图片\ndata.file = [];\nif (elem.querySelector('#imgsDiv').querySelectorAll('.img').length > 0) {\n  var divs = elem.querySelector('#imgsDiv').querySelectorAll('.img');\n\n  if (window.reportSrc) {\n    if (window.reportSrc.length > divs.length) {\n      window.reportSrc.splice(0, window.reportSrc.length - divs.length);\n    }\n  } else {\n    window.reportSrc = [];\n  }\n\n  for (var i = 0; i < divs.length; i++) {\n    var src = [],\n        title = [],\n        content = [];\n    var imgCanvas = ysp.customHelper.convertImageToCanvas(divs[i].querySelector('img'));\n    var scrC = ysp.customHelper.convertCanvasToImage(imgCanvas);\n    src.push(scrC);\n    var s;\n    title.push(divs[i].getAttribute(\"imgname\"));\n    content.push(divs[i].getAttribute(\"imgname\"));\n    var images = {\n      title: title,\n      content: content,\n      src: src\n    };\n    data.file.push(images);\n  }\n} /*_____________________\r\n         \t以下为选中人员确定按钮展示人数\r\n         _______________________*/\nif (elem.querySelector('#ContactSure') != null) {\n  data.commit = {\n    number: elem.querySelector('#ContactSure').querySelector('em').textContent\n  };\n} /*_____________________\r\n          \t以下为Dialog中展示数据\r\n          _______________________*/\nvar DialogElem = elem;\nvar branchs = DialogElem.querySelector('#ContactAlert').querySelectorAll('.box');\ndata.Dialog = [];\nfor (var i = 0, personnel = ''; i < branchs.length; i++) {\n  var bran = [],\n      perso = [],\n      checked = [];\n  bran.push([branchs[i].querySelector('.area-name').textContent.replace(/^(\\s*)|(\\s*)$/g, '')]);\n  personnel = branchs[i].querySelectorAll('.lists-one');\n\n  for (var j = 0; j < personnel.length; j++) {\n    perso.push(personnel[j].querySelector('label').textContent.replace(/^(\\s*)|(\\s*)$/g, ''));\n    checked.push(perso.length > 0 && personnel[j].querySelector('input').checked);\n  }\n\n  var item = {\n    branch: bran,\n    personnel: perso,\n    checked: checked\n  };\n  data.Dialog.push(item);\n} /*_____________________\r\n             \t以下为@人员中展示数据\r\n             _______________________*/\ndata.user = {\n  users: [],\n  val: [],\n  val1: []\n};\nvar users = elem.querySelector('#ContactUsers').querySelectorAll('span').length && elem.querySelector('#ContactUsers').querySelectorAll('span') || [];\nfor (var i = 0; i < users.length; i++) {\n  var textInfo = users[i].textContent.trim();\n  data.user.users.push(textInfo);\n  data.user.val.push(users[i].getAttribute('val'));\n  data.user.val1.push(users[i].getAttribute('val1'));\n} //判断状态\n//var buttonLength = elem.querySelector('.btn-box').querySelectorAll('button');\n// [].forEach.call(buttonLength,function(button,index){\n//   if(button)\n// })\nvar buttonLength;\nvar draft = elem.querySelector(\"#draft\");\nvar save = elem.querySelector(\"#save\");\nvar draftStyle = win.getComputedStyle(draft).display;\nvar saveStyle = win.getComputedStyle(save).display;\nif (\"none\" == draftStyle && \"none\" == saveStyle) {\n  buttonLength = 1;\n} else if (\"none\" != draftStyle && \"none\" != saveStyle) {\n  buttonLength = 3;\n} else if (\"none\" == draftStyle) {\n  buttonLength = 2;\n}\ndata.button = buttonLength; //获取搜索后的分公司\ndata.subPerson = []; //var parElem = elem.parentElement.parentElement.parentElement;\nvar act = $(elem).find('#contentBody').find(\".z-act\");\nif (act.length > 0) {\n  act.each(function (index, item) {\n    var planGs = [];\n    var gs = $(item).find('.title').find('.area-name').html();\n    planGs.push(gs);\n    var itemData = {\n      planGs: planGs\n    };\n    data.subPerson.push(itemData);\n  });\n} //搜索人员列表\nif (elem.querySelector(\"#search-lists\")) {\n  if (elem.querySelector(\"#search-lists\").querySelectorAll(\"a\")[0]) {\n    data.searchList = elem.querySelector(\"#search-lists\").querySelectorAll(\"a\")[0].getAttribute(\"val2\");\n    data.boxId = \"box_\" + data.searchList;\n    data.No = elem.querySelector(\"#contentBody\").querySelector(\"#\" + data.boxId).querySelector(\".area-name\").textContent;\n    var searchListVal = elem.querySelector(\"#search-lists\").querySelectorAll(\"a\")[0].getAttribute(\"val\");\n    var labelFor = \"id\" + searchListVal;\n\n    if (elem.querySelector(\"#contentBody\").querySelector(\"#\" + data.boxId).querySelector(\"#\" + labelFor)) {\n      var labelEl = elem.querySelector(\"#contentBody\").querySelector(\"#\" + data.boxId).querySelector(\"#\" + labelFor).parentNode.parentNode;\n      data.personIndex = $(elem.querySelector(\"#contentBody\").querySelector(\"#\" + data.boxId)).find(\".lists-one\").index(labelEl);\n    }\n  }\n} /**\r\n  return elem.defaultView.frameElement.name;**/\nreturn data;\n"
+doAction_uiControl50_m3HABT: >
+  //
+  elem.ownerDocument.querySelector('#contentBody').querySelectorAll('.box')[0].querySelectorAll('div')[0].click();
+
+  //下拉选项方法
+
+  if (data.eventType === 'change') {
+    var value = data.dataCustom.value;
+    var selectEl = elem.querySelectorAll('select');
+    selectEl[0].selectedIndex = value;
+
+    if (selectEl[0].onchange) {
+      selectEl[0].onchange();
+    } else if (selectEl[0].dispatchEvent) {
+      selectEl[0].dispatchEvent(new Event('change'));
+    } else {
+      selectEl[0].dispatchEvent(new MouseEvent('click', {
+        view: selectEl[0].ownerDocument.defaultView,
+        bubbles: true,
+        cancelable: true
+      }));
+    }
+  } //texarea方法
+
+  if ("textChange" == data.eventType) {
+    var flag = data.dataCustom.flag;
+    var value = data.dataCustom.value;
+
+    if ("总结内容" == flag) {
+      elem.querySelectorAll(".con-box")[0].querySelector("textarea").value = value;
+    } else if ("huaweiFD" == flag) {
+      elem.querySelector(".huaweiFD").querySelector("textarea").value = value;
+    } else if ("huaweiPJ" == flag) {
+      elem.querySelector(".huaweiPJ").querySelector("textarea").value = value;
+    } else if ("huaweiStore" == flag) {
+      elem.querySelector(".huaweiStore").querySelector("textarea").value = value;
+    } else if ("samsung" == flag) {
+      elem.querySelector(".samsung").querySelector("textarea").value = value;
+    } else if ("distribution" == flag) {
+      elem.querySelector(".distribution").querySelector("textarea").value = value;
+    } else if ("others" == flag) {
+      elem.querySelector(".others").querySelector("textarea").value = value;
+    } else if ("problem" == flag) {
+      elem.querySelector(".problem-con").querySelector("textarea").value = value;
+    }
+  }
+
+  if ("spanClick" == data.eventType) {
+    var index = data.dataCustom;
+    var spans = elem.querySelector("#lableTabs").querySelectorAll("span");
+    [].forEach.call(spans, function (span, i) {
+      if (index == i) {
+        span.click();
+      }
+    });
+  } //保存草稿
+
+  if ("save" == data.eventType) {
+    if (top.EAPI.isAndroid()) {
+      top.yspCheckIn.isRefresh(true);
+    } //history.go(-1);
+
+
+    elem.querySelector("#draft") && elem.querySelector("#draft").click();
+    ysp.appMain.showLoading();
+    setTimeout(function () {
+      ysp.appMain.hideLoading();
+      var url = "http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html"; //ysp.appMain.reloadPage(url);
+      //更换返回方法 BackReload()回到工作台
+      // ysp.appMain.back();
+
+      ysp.customHelper.back();
+      ysp.customHelper.BackReload('http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html', 'customerWorkspace');
+    }, 500);
+  } //提交报告
+
+  if ("commitReport" == data.eventType) {
+    if (top.EAPI.isAndroid()) {
+      top.yspCheckIn.isRefresh(true);
+    }
+
+    var user = data.dataCustom;
+
+    if (user.length) {
+      //history.go(-1);
+      ysp.appMain.showLoading();
+      setTimeout(function () {
+        ysp.appMain.hideLoading();
+        var url = "http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html"; //更换返回方法 BackReload()回到工作台
+        // ysp.appMain.back();
+
+        ysp.customHelper.back();
+        ysp.customHelper.BackReload('http://192.168.220.82:8080/pttlCrm/res/page/visitManager/customerWorkspace/customerWorkspace.html', 'customerWorkspace');
+      }, 500);
+    }
+
+    elem.querySelector("#save") && elem.querySelector("#save").click();
+  } //点击at报告
+
+  if ("at" == data.eventType) {
+    elem.querySelector("#DisplayContact") && elem.querySelector("#DisplayContact").click();
+  }
+
+  if ("branch" == data.eventType) {
+    var data = data.dataCustom;
+    var index = data.Index;
+    var oldNumber = data.OldNumber;
+
+    if (oldNumber !== '') {
+      var btn1 = elem.ownerDocument.querySelectorAll(".area-name")[oldNumber];
+      btn1.click();
+    }
+
+    var btn = elem.ownerDocument.querySelectorAll(".area-name")[index];
+    btn.click();
+  }
+
+  if ("cancel" == data.eventType) {
+    var index = data.dataCustom;
+    var btn = elem.ownerDocument.querySelectorAll(".area-name")[index];
+    btn.click();
+  }
+
+  if ("personnel" == data.eventType) {
+    var data = data.dataCustom;
+    var index = data.Index;
+    var parentIndex = data.parentIndex;
+    var parent = elem.ownerDocument.querySelectorAll('.box')[parentIndex];
+    var btn = parent.querySelectorAll(".iCheck-helper")[index];
+    btn.click();
+  } //抄送人员搜索方法
+
+  if ("serch" == data.eventType) {
+    var sureFlag = ''; //定义一个可以判断是不是要走样式美化的的标志字段 
+
+    var inputVal = data.dataCustom.value;
+    var ele = elem.ownerDocument;
+    ele.querySelector('#contactSearch').value = data.dataCustom.value;
+    ele.querySelector('#icon-search').click();
+    var lists = ele.querySelector('#search-lists');
+    var as = lists.firstElementChild;
+
+    if (as == null) {
+      setTimeout(function () {
+        var list = lists.firstElementChild;
+
+        if (list) {
+          var personName = list.innerText;
+
+          if (inputVal && personName.indexOf(inputVal) != -1) {
+            list.click();
+            sureFlag = 'true';
+          } else {
+            sureFlag = 'false';
+          }
+
+          if (window.sessionStorage) {
+            window.sessionStorage.setItem("sureFlag", sureFlag);
+          }
+        } else {
+          setTimeout(function () {
+            var list = lists.firstElementChild;
+
+            if (list) {
+              var personName = list.innerText;
+
+              if (inputVal && personName.indexOf(inputVal) != -1) {
+                list.click();
+                sureFlag = 'true';
+              } else {
+                sureFlag = 'false';
+              }
+
+              if (window.sessionStorage) {
+                window.sessionStorage.setItem("sureFlag", sureFlag);
+              }
+            }
+          }, 500);
+        }
+      }, 500);
+    } else {
+      setTimeout(function () {
+        var list = lists.firstElementChild;
+
+        if (list) {
+          var name = list.innerText;
+
+          if (inputVal && name.indexOf(inputVal) != -1) {
+            list.click();
+            sureFlag = 'true';
+          } else {
+            sureFlag = 'false';
+          }
+        } else {
+          sureFlag = 'false';
+        }
+
+        if (window.sessionStorage) {
+          window.sessionStorage.setItem("sureFlag", sureFlag);
+        }
+      }, 500);
+    }
+  } /**控制原PC分公司的 关闭与展开**/
+
+  if ("oldBranch" == data.eventType) {
+    var oldNumber = +data.dataCustom;
+
+    if (!isNaN(oldNumber)) {
+      var btn1 = elem.ownerDocument.querySelectorAll(".area-name")[oldNumber];
+      btn1.click();
+    }
+  } /**通过移动端控制原PC分公司项闭合**/
+
+  if ("selectCommit" == data.eventType) {
+    elem.ownerDocument.querySelector('#ContactSure').click();
+  } //删除所选人员
+
+  if ("icon-close" == data.eventType) {
+    var index = data.dataCustom;
+    elem.ownerDocument.querySelector('#ContactUsers').querySelectorAll('span')[index].querySelector('i').click();
+  } //删除上传图片
+
+  if ("delect" == data.eventType) {
+    var index = data.dataCustom;
+    elem.querySelector("#imgsDiv").querySelectorAll('.img')[index].querySelector('a').click();
+  }
+
+  if ("imageClick" == data.eventType) {
+    if (top.EAPI.isAndroid()) {
+      top.yspCheckIn.isRefresh(false);
+    }
+
+    elem.querySelector("#formUploadify").querySelector('#importFile').click();
+  }
+
+  if ("chose" == data.eventType) {
+    var text = data.dataCustom;
+
+    if ("华为FD业务事业部" == text) {
+      elem.querySelector(".huaweiFD").querySelector("a").click();
+    } else if ("融合及配件业务事业部" == text) {
+      elem.querySelector(".huaweiPJ").querySelector("a").click();
+    } else if ("华为体验店业务事业部" == text) {
+      elem.querySelector(".huaweiStore").querySelector("a").click();
+    } else if ("三星业务事业部" == text) {
+      elem.querySelector(".samsung").querySelector("a").click();
+    } else if ("大客户业务部" == text) {
+      elem.querySelector(".distribution").querySelector("a").click();
+    } else if ("其他" == text) {
+      elem.querySelector(".others").querySelector("a").click();
+    }
+  }
+getTemplate_uiControl50_m3HABT: "import {ComplexHeader,\n        SaleReachCalendar,\n        Dialog,\n        CustomHeader,\n       \tCustomerSerch} from 'ysp-custom-components';\nexport default class extends React.Component {\n  constructor(props){\n    super(props)\n    this.state = {\n      open: false,\n      flag:false,\n      more: false,\n      show: false,\n      index:'',\n      defaultIndex:0,\n      textSum: props.data.customData && props.data.customData.textSum,\n      problemValue: props.data.customData && props.data.customData.problemValue,\n    \thuaweiFDFlag: props.data.customData && props.data.customData.huaweiFD && props.data.customData.huaweiFD.huaweiFDFlag,\n    \thuaweiFDText: props.data.customData && props.data.customData.huaweiFD && props.data.customData.huaweiFD.huaweiFDText,\n    \thuaweiPJFlag: props.data.customData && props.data.customData.huaweiPJ && props.data.customData.huaweiPJ.huaweiPJFlag,\n    \thuaweiPJText: props.data.customData && props.data.customData.huaweiPJ && props.data.customData.huaweiPJ.huaweiPJText,\n    \thuaweiStoreFlag: props.data.customData && props.data.customData.huaweiStore && props.data.customData.huaweiStore.huaweiStoreFlag,\n    \thuaweiStoreText: props.data.customData && props.data.customData.huaweiStore && props.data.customData.huaweiStore.huaweiStoreText,\n      /***\n    \thuaweiSBFlag: props.data.customData && props.data.customData.huaweiSB && props.data.customData.huaweiSB.huaweiSBFlag,\n    \thuaweiSBText: props.data.customData && props.data.customData.huaweiSB && props.data.customData.huaweiSB.huaweiSBText,\n      ***/\n    \tsamsungFlag: props.data.customData && props.data.customData.samsung && props.data.customData.samsung.samsungFlag,\n    \tsamsungText: props.data.customData && props.data.customData.samsung && props.data.customData.samsung.samsungText,\n    \tdistributionFlag: props.data.customData && props.data.customData.distribution && props.data.customData.distribution.distributionFlag,\n    \tdistributionText: props.data.customData && props.data.customData.distribution && props.data.customData.distribution.distributionText,\n    \tothersFlag: props.data.customData && props.data.customData.others && props.data.customData.others.othersFlag,\n    \tothersText: props.data.customData && props.data.customData.others && props.data.customData.others.othersText\n      \n    }\n  }\n  \n  componentDidMount(e){\n    var outer=this.refs.work.ownerDocument.querySelector('.view-wrapper');\n    setTimeout(function(){\n\_\_\_\_\_\_outer.scrollTop=0\n\_\_\_\_},500);\n    this.viewer = new Viewer(this.refs.Img);\n  }\n  componentDidMount(){\n    var _this = this;\n  }\n   Dimg=(e)=>{\n     var _this = this;\n    _this.viewer = new Viewer(this.refs.Img);\n    _this.viewer.show();\n  }\n  componentWillReceiveProps(nextProps){\n    this.setState({\n      textSum: nextProps.customData && nextProps.customData.textSum,\n      problemValue : nextProps.customData && nextProps.customData.problemValue,\n      huaweiFDFlag: nextProps.customData && nextProps.customData.huaweiFD && nextProps.customData.huaweiFD.huaweiFDFlag,\n        huaweiFDText: nextProps.customData && nextProps.customData.huaweiFD && nextProps.customData.huaweiFD.huaweiFDText,\n        huaweiPJFlag: nextProps.customData && nextProps.customData.huaweiPJ && nextProps.customData.huaweiPJ.huaweiPJFlag,\n        huaweiPJText: nextProps.customData && nextProps.customData.huaweiPJ && nextProps.customData.huaweiPJ.huaweiPJText,\n        huaweiStoreFlag: nextProps.customData && nextProps.customData.huaweiStore && nextProps.customData.huaweiStore.huaweiStoreFlag,\n        huaweiStoreText: nextProps.customData && nextProps.customData.huaweiStore && nextProps.customData.huaweiStore.huaweiStoreText,\n      /***\n        huaweiSBFlag: nextProps.customData && nextProps.customData.huaweiSB && nextProps.customData.huaweiSB.huaweiSBFlag,\n        huaweiSBText: nextProps.customData && nextProps.customData.huaweiSB && nextProps.customData.huaweiSB.huaweiSBText,\n        ***/\n        samsungFlag: nextProps.customData && nextProps.customData.samsung && nextProps.customData.samsung.samsungFlag,\n        samsungText: nextProps.customData && nextProps.customData.samsung && nextProps.customData.samsung.samsungText,\n        distributionFlag: nextProps.customData && nextProps.customData.distribution && nextProps.customData.distribution.distributionFlag,\n        distributionText: nextProps.customData && nextProps.customData.distribution && nextProps.customData.distribution.distributionText,\n        othersFlag: nextProps.customData && nextProps.customData.others && nextProps.customData.others.othersFlag,\n        othersText: nextProps.customData && nextProps.customData.others && nextProps.customData.others.othersText\n      })\n  }\n  renderOptions(){\n  \tvar data = this.props.customData && this.props.customData.select;\n    return data.map((item,index) => {\n    \treturn (\n      \t<option value={index}>{item}</option>\n      )\n    })\n  }\n  handlerChange(e){\n    var value = e.target.selectedIndex;\n    var handler = this.props.customHandler;\n    if(handler){\n    \thandler({\n      \tdata: {\n          value: value\n        },\n        eventType: 'change'\n      })\n    }\n  }\n  \n  //时间按钮方法\n  handlerClick(e){\n    var evt = new Event('ysp-workTime-show')\n    window.dispatchEvent(evt)\n  }\n  commonClickSearch(){\n    var _this = this,data = _this.props.customData,i=_this.state.index;\n    _this.refs.personsum.scrollTop=(i*45);\n    var currentBranchPerson = _this.refs.personsum.querySelectorAll(\".ysp-atreport-dialog-person\")[i];\n    currentBranchPerson.querySelector(\".ysp-atreport-dialog-gs\").setAttribute('dialog', 'true');\n    currentBranchPerson.querySelector(\".ysp-atreport-dialog-gs span.Dialog-file-Wj\").style.color = '#4789e0';\n    currentBranchPerson.querySelector(\".ysp-atreport-dialog-gs\").firstChild.setAttribute('class', 'unactive');\n    /***通过快速定位使得当前被搜索到的分公司的某一个人被显示在当前*/\n   +data.personIndex>=1? currentBranchPerson.querySelectorAll('.ysp-person-list>div')[+data.personIndex-1].scrollIntoView():\n   (currentBranchPerson.previousElementSibling ?currentBranchPerson.previousElementSibling.scrollIntoView():\"\" );\n    /**还是那个逻辑：当前搜到的元素被展示。那么其余的注定要被回归原位**/\n    [].slice.call(_this.refs.personsum.querySelectorAll(\".ysp-atreport-dialog-person\")).filter((value,index)=>{\treturn index!==i}).forEach((v,i)=>{\n      v.querySelector(\".ysp-atreport-dialog-gs span.Dialog-file-Wj\").style.color = '#000';\n      v.querySelector(\".ysp-atreport-dialog-gs\").firstChild.setAttribute('class', 'active');\n    });\n  }\n  //textarea 输入文本的方法\n  textChange(e){\n    var target = e.target;\n    var flag = target.dataset.value;\n    var value = target.value;\n    var handler = this.props.customHandler;\n    if(handler){\n      handler({\n        data:{\n          flag:flag,\n          value: value\n        },\n        eventType:'textChange'\n      })\n    }\n  }\n  //点击问题及所属资源\n  spanClick(e){\n    var target = e.target;\n    var index = target.dataset.index;\n    var handler = this.props.customHandler;\n    if(handler){\n      handler({\n        data: index,\n        eventType: 'spanClick'\n      })\n    }\n  }\n  chose(e){\n    var target = e.target;\n    var text = target.previousElementSibling.textContent;\n    var handler = this.props.customHandler;\n    if(handler){\n      handler({\n        data: text,\n        eventType:'chose'\n      })\n    }\n  }\n  branchSelect(e){\n    var _this = this;\n    var index = e.currentTarget.dataset.index;\n    var value = e.target.value;\n    var oldNumber = '';\n    var toggleSwitch = function(e) {\n      while (true) {\n        if (e.nodeName != 'DIV') {\n          e = e.parentElement;\n        } else {\n \_ \_ \_ \_ \_if (e.getAttribute('dialog') == null) {\n             /**判断当一个新的列表项被点击开时那么其余的所有的列表项将被隐藏，字体颜色也将会被变成黑色**/\n            [].slice.call(_this.refs.personsum.querySelectorAll('.ysp-atreport-dialog-person')).filter((v,i)=>{return i!==index}).forEach(\n            (value,index)=>{\n              value.querySelector('.ysp-atreport-dialog-gs').childNodes[0].setAttribute('class', 'active');\n              value.querySelector('.ysp-atreport-dialog-gs').childNodes[2].style.color = '#000';\n            });\n            oldNumber = _this.state.index;\n            var handler = _this.props.customHandler;\n            if (handler) {\n              handler({\n                data: {\n                  Index: index,\n                  OldNumber: oldNumber\n                },\n                eventType: 'branch'\n              })\n            }\n            e.setAttribute('dialog', 'true');\n            _this.setState({\n              index: index,\n              show: true,\n              dialog:e.getAttribute('dialog')\n            })\n            e.firstChild.setAttribute('class', 'unactive');\n            e.querySelector('span.Dialog-file-Wj').style.color = '#4789e0';\n            _this.refs.personsum.querySelector('.ysp-person-list').style.height = '100%'\n            break;\n          } else {\n            var handler = _this.props.customHandler;\n            if (handler) {\n              handler({\n                data: index,\n                eventType: 'cancel'\n              })\n            }\n            e.removeAttribute('dialog');\n            _this.setState({\n              show: false,\n              index: '',\n              dialog:e.getAttribute('dialog')\n            })\n            e.firstChild.setAttribute('class', 'active');\n            e.querySelector('span.Dialog-file-Wj').style.color = '#000';\n            _this.refs.personsum.querySelector('.ysp-person-list').style.height = '0px'\n            break;\n          }\n        }\n      }\n    }\n    toggleSwitch(e.target);\n  }\n  handlerAt = (e)=>{\n      var handler = this.props.customHandler,_this=this,data=_this.props.customData;\n      this.setState(\n        {open:!this.state.open} \n      );\n      if(handler){\n        handler({\n          eventType:\"at\"\n        });\n      }\n     setTimeout(function(){\n      _this.refs.personsum.ownerDocument.querySelector(\"div[data-ysp-modelid='workSummary']\").scrollTop=0;\n       //点击选择对象按钮之后，选择对象列表默认永远是第一个分公司被展开\n       \n       var defaultItem  = _this.refs.personsum.querySelectorAll(\".ysp-atreport-dialog-person\")[_this.state.defaultIndex].querySelector(\".ysp-atreport-dialog-gs\");\n   if ( defaultItem ) {\n            /**判断当一个新的列表项被点击开时那么其余的所有的列表项将被隐藏，字体颜色也将会被变成黑色**/\n            [].slice.call(_this.refs.personsum.querySelectorAll('.ysp-atreport-dialog-person')).filter((v,i)=>{return i!==_this.state.defaultIndex}).forEach(\n            (value,index)=>{\n              value.querySelector('.ysp-atreport-dialog-gs').childNodes[0].setAttribute('class', 'active');\n              value.querySelector('.ysp-atreport-dialog-gs').childNodes[2].style.color = '#000';\n            });\n\t\t\t\t\t\tdefaultItem.setAttribute('dialog', 'true');\n            _this.setState({\n              index: _this.state.defaultIndex,\n              show: true,\n              dialog:defaultItem.getAttribute('dialog')\n            })\n            defaultItem.firstChild.setAttribute('class', 'unactive');\n            defaultItem.querySelector('span.Dialog-file-Wj').style.color = '#4789e0';\n            _this.refs.personsum.querySelector('.ysp-person-list').style.height = '100%'\n\n   }\n\n            },1000)\n\n    }\n  personnelName = (e) => {\n    var index = e.currentTarget.dataset.index;\n    var handler = this.props.customHandler;\n    if (handler) {\n      handler({\n        data: {\n          Index: index,\n          parentIndex: this.state.index\n        },\n        eventType: 'personnel'\n      })\n    }\n  }\n  \n  //抄送搜索\n  clickSearch = (e) => {\n    if(window.sessionStorage){\n       window.sessionStorage.setItem('sureFlag','');\n   \t}\n    var _this = this,oldNumber = +_this.state.index;\n    var data=_this.props.customData;\n    var handler = _this.props.customHandler;\n     if(handler){\n      handler({\n        data:{value:e.target.previousSibling.value},\n        eventType:'serch'\n      })\n    }\n    \n    setTimeout(function(){\n    \tvar data = _this.props.customData;\n      data.Dialog.forEach((branch,i)=>{\n          if((data.Dialog[i].branch[0][0]) == data.No){\n          //打开搜索下拉分公司\n          //获取之前点击的分公司的对应的DOM结构的dialog属性值\n             var  sureFlag =   window.sessionStorage.getItem(\"sureFlag\");\n            lastBraDia = _this.refs.personsum.querySelectorAll(\".ysp-atreport-dialog-person\")[oldNumber].querySelector(\".ysp-atreport-dialog-gs\").getAttribute('dialog');\n            oldNumber = (oldNumber!=i && lastBraDia==\"true\" && sureFlag && sureFlag=='true') ? oldNumber:'old';\n        \tif(handler){\n            handler({\n              data:oldNumber,\n              eventType:'oldBranch'\n            })\n          }\n           var flag = _this.state.flag;\n              if(sureFlag && sureFlag=='true'){\n                  _this.setState({\n                  index: i,\n                  show: true,\n                  flag: true,\n                  No:data.No,\n                  dialog:\"true\"\n                });\n                 _this.commonClickSearch();\n             }\n          }\n      })\n  \t},4000)\n  }\n  //判断更多和收起\n  switch(e){\n    this.setState({\n      more: !this.state.more\n    })  \n  }\n\n\trender(){\n    var data = this.props.customData || [];\n    var content = this.props.customData && this.props.customData.content;\n    var flag = this.props.customData && this.props.customData.flag[0];\n  \treturn (\n    \t<div className='ysp-workSummary-style' ref=\"work\">\n        <div className='timeSearch'>\n          <div className='summary-type'>\n            <span>总结类型:</span>\n            <span>\n            \t<select selectedIndex='0'  onChange={this.handlerChange.bind(this)}>{this.renderOptions()}</select>\n            </span>\n          </div>\n          <div className='plan-time'>\n            <span>计划时间:</span>\n            <i></i>\n            <span display=\"display\" onClick={this.handlerClick.bind(this)} ref='date' >{data && data.date[0]}</span>\n            <i></i>\n          </div>\n        </div>\n        <div className=\"ysp-workSummary-text\">\n          <div>\n            <span>总结内容</span>\n          </div>\n          {\n            this.state.textSum !=\"\" ? \n           \t<div>\n              <ATextarea onBlur={this.textChange.bind(this)} data-value=\"总结内容\" value={this.state.textSum}></ATextarea>\n            </div>\n              :\n            <div>\n              <ATextarea value={this.state.textSum} onBlur={this.textChange.bind(this)} data-value=\"总结内容\" placeholder=\"请填写总结内容\"></ATextarea>\n            </div>\n          }\n        </div>\n        \n        {\n          this.state.huaweiFDFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>华为FD业务事业部</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.huaweiFDText !=\"\" ?\n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"huaweiFD\" value={this.state.huaweiFDText}></ATextarea>\n              \t</div>\n                  : \n                <div>\n                \t<ATextarea value={this.state.huaweiFDText} onBlur={this.textChange.bind(this)} data-value=\"huaweiFD\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n            </div>\n            :\n            <div></div>\n        }\n        {\n          this.state.huaweiPJFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>融合及配件业务事业部</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.huaweiPJText !=\"\" ?\n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"huaweiPJ\" value={this.state.huaweiPJText}></ATextarea>\n              \t</div>\n                  :\n                <div>\n                \t<ATextarea value={this.state.huaweiPJText} onBlur={this.textChange.bind(this)} data-value=\"huaweiPJ\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        {\n          this.state.huaweiStoreFlag && this.state.huaweiStoreFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>华为体验店业务事业部</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.huaweiStoreText !=\"\" ?\n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"huaweiStore\" value={this.state.huaweiStoreText}></ATextarea>\n              \t</div>\n                  :\n                <div>\n                \t<ATextarea value={this.state.huaweiStoreText} onBlur={this.textChange.bind(this)} data-value=\"huaweiStore\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        {\n          this.state.huaweiSBFlag && this.state.huaweiSBFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>华为省包</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.huaweiSBText &&this.state.huaweiSBText !=\"\" ? \n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"huaweiSB\" value={this.state.huaweiSBText}></ATextarea>\n              \t</div> \n                \t:\n                <div>\n                \t<ATextarea value={this.state.huaweiSBText} onBlur={this.textChange.bind(this)} data-value=\"huaweiSB\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        {\n          this.state.samsungFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>三星业务事业部</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.samsungText !=\"\" ?\n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"samsung\" value={this.state.samsungText}></ATextarea>\n              \t</div>\n                  :\n                <div>\n                \t<ATextarea value={this.state.samsungText} onBlur={this.textChange.bind(this)} data-value=\"samsung\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        {\n          this.state.distributionFlag && this.state.distributionFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>大客户业务部</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.distributionText !=\"\" ? \n                <div>\n                \t<ATextarea onBlur={this.textChange.bind(this)} data-value=\"distribution\" value={this.state.distributionText}></ATextarea>\n              \t</div>\n                  :\n                <div>\n                \t<ATextarea value={this.state.distributionText} onBlur={this.textChange.bind(this)} data-value=\"distribution\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        {\n           this.state.othersFlag && this.state.othersFlag.length > 0 ? \n            <div className=\"ysp-workSummary-choseText\">\n              <div>\n                <span>其他</span>\n                <span onClick={this.chose.bind(this)}></span>\n              </div>\n              {\n                this.state.othersText !=\"\" ?\n                <div>\n                <ATextarea onBlur={this.textChange.bind(this)} data-value=\"others\" value={this.state.othersText}></ATextarea>\n              \t</div>\n                  :\n                <div>\n                \t<ATextarea value={this.state.othersText} onBlur={this.textChange.bind(this)} data-value=\"others\" placeholder=\"请填写总结内容\"></ATextarea>\n              \t</div>\n              }\n              \n            </div>\n            :\n            <div></div>\n          }\n        \t<div className=\"ysp-workSummary-text\">\n            <div>\n              <span>重要事项反馈</span>\n            </div>\n            {\n              this.state.problemValue[0] !=\"\" ?\n              <div>\n                <ATextarea onBlur={this.textChange.bind(this)} data-value=\"problem\" value={this.state.problemValue[0]}></ATextarea>\n              </div>\n                : \n              <div>\n                <ATextarea value={this.state.problemValue[0]} onBlur={this.textChange.bind(this)} data-value=\"problem\" placeholder=\"请填写总结内容\"></ATextarea>\n              </div>\n            }\n          </div>\n        \n        <div>\n        \t{\n            content.length > 0 ? \n            <div>\n              {\n                  flag == \"false\" ?\n                    <div className=\"ysp-workSummary-lable\">\n                      {\n                       content.map((items, index)=>\n                          <span className={items[0] == \"true\" ? \"ysp-workSummary-uncheck ysp-workSummary-check\" : \"ysp-workSummary-uncheck\"} onClick={this.spanClick.bind(this)} data-index = {index}>\n                            {\n                             items[1] \n                            }\n                          </span>\n                        )   \n                      }\n                    </div>\n                    : \n                   <div>\n                  \t<div className = {this.state.more ? \"ysp-workSummary-lable-sq\" : \"ysp-workSummary-lable-gd\"}>\n                    {\n                     content.map((items, index)=>\n                        <span className={items[0] == \"true\" ? \"ysp-workSummary-uncheck ysp-workSummary-check\" : \"ysp-workSummary-uncheck\"} onClick={this.spanClick.bind(this)} data-index = {index}>\n                          {\n                           items[1] \n                          }\n                        </span>\n                      )          \n                    }\n                  \t</div>\n                    {\n                      this.state.more ? \n                        <div className=\"ysp-workSummary-sq\"><a href=\"#\" onClick={this.switch.bind(this)}>收起</a></div>\n                        :\n                        <div className=\"ysp-workSummary-gd\"><a href=\"#\" onClick={this.switch.bind(this)}>更多</a></div>\n                    }\n                   </div>\n                  \n                }  \n              \n            </div>\n            \t: \n            <div></div>\n          }\n        </div>\n        \n        \n        \n         <div className=\"ysp-atreport-picture images-report\">\n            <div className = 'upload'>\n              <div>上传照片</div>\n              <div className='updata-image' onClick={(e)=>{\n       \t\t\t\t\t\tvar handler = this.props.customHandler;\n                  if(handler){\n                    handler({\n                      eventType:'imageClick'\n                    })\n                  }\n                }}><span>上传照片</span></div>\n              <div ref ='Img' onClick={this.Dimg.bind(this)}>\n                {data.file.map((d,i)=>{\n                  return(\n                    <div className='file-images'>\n                      <div className='file-images-rows' data-index={i}>\n                        <img title={d.title} src={d.src}/>\n                        <i onClick={(e)=>{\n                           var handler = this.props.customHandler;\n                           if(handler){\n                             handler({\n                               data:e.target.parentElement.dataset.index,\n                               eventType:'delect'\n                             })\n                           }\n                         }}>\n                        </i>\n                     </div>\n                          <span>{d.content}</span>\n                   </div>\n                 )\n              })}\n                </div>\n            </div>\n            <div className=\"ysp-worksum\" id =\"focus\" ref=\"focus\">\n              <span>汇报</span>\n              <span onClick={this.handlerAt.bind(this)}>\n                选择对象\n              </span>\n            </div>\n          \n            <div className='personnel'> \n              <div style={{display:\"none\"}}>\n                <div>@&nbsp;<span>选择汇报人员</span></div>\n                <div className='add' onClick={(e)=>{\n                  var handler = this.props.customHandler;\n                  if(handler){\n                    handler({\n                      eventType:'at'\n                    })\n                    this.setState({\n                      open: !this.state.open\n                    })\n                    // setTimeout(function(){\n                    //   _this.refs.personsum.ownerDocument.querySelector(\"div[data-ysp-modelid='wtiteReport']\").scrollTop=0\n                    // },500)\n\n                  }\n                }}>\n                </div>\n              </div>\n              <div>{data.user.users.map((u,i)=>{\n                  return (\n                    <div className='report report1'>\n                      <div data-index={i} val={data.user.val} val1={data.user.val1}><i className='personal-close' onClick={(e)=>{\n                            var handler = this.props.customHandler;\n                            if(handler){\n                              handler({\n                                data:e.target.parentElement.dataset.index,\n                                eventType:'icon-close'\n                              })\n                            }\n                          }}></i><span>{u}</span>\n                      </div>\n                    </div>\n                  )\n                })}\n              </div>\n            </div>\n            {\n              data.button == 3 ?\n                <div className='update-commit'>\n                  <button onClick={(e)=>{\n                      var handler =this.props.customHandler;\n                      var target = e.target;\n                      target.disabled = true;\n                      if(handler){\n                        handler({\n                          eventType:'save'\n                        })\n                      }\n                    }}>保存草稿</button>\n                  <button onClick={(e)=>{\n                      var handler =this.props.customHandler;\n                      var target = e.target;\n                      //target.disabled = true;\n                      if(handler){\n                        handler({\n                          eventType:'commitReport',\n                          data: data.user.users\n                        })\n                      }\n                    }}>提交报告</button>\n            \t</div>\n                :\n              data.button == 2 ? \n              <div className='update-commit'>\n                <button className=\"reportCommit\" onClick={(e)=>{\n                    var handler =this.props.customHandler;\n                    var target = e.target;\n                    //target.disabled = true;  \n                    if(handler){\n                      handler({\n                        eventType:'commitReport',\n                        data: data.user.users\n                      })\n                    }\n                  }}>提交报告</button>\n            \t</div>\n                : \n            \t<div></div>\n            }\n             \n        </div>\n        \n        \n        \n        {this.state.open && <Dialog>\n          \t<div className='surebtn-right-top'>\n            <CustomHeader \n             data={{centerText:\"汇报对象\",rightText:\"筛选\"}} \n             backIsShow={true} \n             back={()=>{ \n                this.refs.focus.scrollIntoView();\n                var handler = this.props.customHandler;\n                if(handler){\n                  handler({\n                    eventType:'close'\n                  })\n                }\n                //_this.togglerSwitch();\n                this.setState({\n                  open: false\n                })\n                \n             }} \n             filterIsShow={false} \n             filter={()=>{console.info(\"header filter ...\")}}/>\n          \t <span onClick={(e)=>{\n                   e.target.ownerDocument.defaultView.location.href ='#focus';\n                  var handler = this.props.customHandler;\n                  if(handler){\n                    handler({\n                      eventType :\"close\"\n                    });\n                  }\n                  this.setState({open:false});\n                 \n                }}>\n               确定\n              </span>\n          </div>\n            <div className=\"ysp-atreport-dialog-gsperson\" style={{\"marginTop\":\"43px\"}}>\n              <div className=\"ysp-atreport-dialog-search\">\n                <CustomerSerch \n                  placeholder='搜索'\n                  click={this.clickSearch.bind(this)}\n                 \n                  buttonState ={true}\n            \t\t\twidth={true}\n                />\n              </div>\n          </div>\n          \n          <div className='Dialog-content' ref=\"personsum\">\n              {data.Dialog.map((branch,i)=>{\n                  return (\n                    <div className=\"ysp-atreport-dialog-person\">\n                        <div className=\"ysp-atreport-dialog-gs\" onClick={this.branchSelect.bind(this)} \n                        data-index ={i} dialog={+this.state.index === i && this.state.dialog}>\n                          <span className = 'active' ></span>\n                          <span className=\"ysp-atreport-dialog-gsfile\"></span>\n                          <span className='Dialog-file-Wj'>{data.Dialog[i].branch}</span>\n                   \t\t\t</div>\n                      {this.state.index == i && \n                        <div className=\"ysp-person-list\">{data.Dialog[i].personnel.map((item,k)=>{\n                        return (\n                          <div  onClick={this.personnelName.bind(this)} data-index={k}>\n                             {this.state.show && <div className='person-icon'>\n                            <i type='checkbox' className={data.Dialog[i].checked[k] ? 'icon-active' : 'icon-unactive'}></i>\n                            <i className={data.Dialog[i].checked[k] ? 'icon-selected' : 'icon-unselected'}></i>     \n                            <div>{item}</div>\n                          </div>}\n                        </div>\n                        )})}\n                      </div>}\n                    </div>\n                  )\n                })\n              }\n           \n              <div className='commit-dialog'>\n               {/**  ===右下角确定选中个数的确定按钮不需要了，注释掉\n               <button onClick={(e)=>{\n                    var handler = this.props.customHandler;\n                    if(handler){\n                      handler({\n                        eventType:'selectCommit'\n                      })\n                    }\n                    if(data.commit && data.commit.number  && data.commit.number != ''){\n                      this.setState({\n                        open:false\n                      })\n                    }\n                  }}>确定{ data.commit && data.commit.number}</button>\n               **/}\n              </div>\n            </div>\n            \n          </Dialog>}\n      </div>\n    )\n  }\n}"
+getData_control57_GbJSEi: |
+  var data = {};
+  if (ysp.customHelper.tipMsg.getMsg()) {
+    data.postMessage = ysp.customHelper.tipMsg.getMsg();
+  } else {
+    data.postMessage = "";
+  }
+  if (ysp.customHelper.tipMsg.cancelText()) {
+    data.cancel = ysp.customHelper.tipMsg.cancelText();
+  } else {
+    data.cancel = "";
+  }
+  return data;
+doAction_uiControl56_2odMIT: |
+  if (data.eventType == "confirmClick") {
+    ysp.customHelper.tipMsg.confirm();
+  }
+  if (data.eventType == "cancelClick") {
+    ysp.customHelper.tipMsg.cancel();
+  }
+getTemplate_uiControl56_2odMIT: "import {\n  Component\n} from 'react';\nimport {\n\tAlert\n} from 'ysp-custom-components';\nexport default class extends Component {\n  render(){\n    var dataMessage = (this.props.customData && this.props.customData.postMessage) || \"\";\n    var dataCancel = (this.props.customData && this.props.customData.cancel) || \"\";\n     return(\n    \t<div>\n        {dataMessage ==\"\" ? \"\" : \n          <Alert\n            content={dataMessage}\n            cancelText={dataCancel}\n            dismiss={\n              (e)=>{\n                var handler=this.props.customHandler;\n                if(handler){\n                  handler({\n                    eventType:\"confirmClick\"\n                  })\n                }\n              }\n            }\n            cancel={\n             (e)=>{\n                var handler=this.props.customHandler;\n                if(handler){\n                  handler({\n                    eventType:\"cancelClick\"\n                  })\n                }\n              }\n           }\n          />\n        }\n      </div>\n    )\n  }\n}\n"
+getData_control314_7bvT0P: |
+  return true;
+doAction_uiControl305_f4G8f6: |
+  if (data.eventType == 'upValue') {
+    // var dateArr = data.dataCustom.split('-');
+    // var date = dateArr.map((v, i) => {
+    //   if (i == 0) {
+    //     return v + "年";
+    //   } else if (i == 1) {
+    //     return v + "月";
+    //   } else if (i == 2) {
+    //     return v + "日";
+    //   } else {}
+    // }).join("");
+    var dataValue = data.dataCustom;
+    var input = elem.ownerDocument.querySelector('#workSummaryPlanTime'),
+        span = elem.ownerDocument.querySelector("#workSummaryPlanTimeLable span ");
+    input.value = dataValue, span.textContent = dataValue;
+    input.focus();
+    var cwin = elem.ownerDocument.defaultView; //cwin.workTime();
+
+    cwin.changeInputTime();
+  }
+getTemplate_uiControl305_f4G8f6: |-
+  import {Component} from 'react';
+  import {SaleReachCalendar} from 'ysp-custom-components';
+  export default class extends Component{
+    constructor(props){
+      super(props);
+      this.state={
+        year : true,
+        mouth : true,
+        day : true,
+        show : false,
+        data : props.customData
+      }
+      window.addEventListener('ysp-workTime-show',this.toggle.bind(this),false)
+    }
+    componentDidUpdate(){
+      this.state.show ? this.styleId(): console.log('日历还没打开呢');
+      
+    }
+    styleId(){
+      var doc = this.refs.time;
+      if(this.state.data && !this.state.day  && !!this.state.mouth){
+        doc.querySelector('#year').style.width = '50%';
+        doc.querySelector('#mouth').style.width = '50%';
+      }
+      if(this.state.data && !this.state.mouth && !this.state.day){
+        doc.querySelector('#year').style.width = '100%';
+      }
+      if(!this.state.data){
+        doc.querySelector('#year').style.width = '100%';
+      }
+    }
+    toggle(){
+      this.setState({
+        show : !this.state.show
+      })
+    }
+    activeValue(even){
+      var doc = even.parentElement.nextElementSibling;
+      var year = doc.querySelector('#year').querySelector('.active').textContent;
+      var mouth = this.state.mouth && doc.querySelector('#mouth').querySelector('.active').textContent;
+      var day = this.state.day && doc.querySelector('#day').querySelector('.active').textContent;
+      mouth = mouth < 10 ? '0' + mouth : mouth; 
+      day = day && day < 10 ? '0' + day : day;
+      var time = day ? (year + '-' + mouth + '-' + day ) :( mouth ? year + '-' + mouth : year);
+      return time;
+      // if(this.props.customData){
+      //   var year = doc.querySelector('#year').querySelector('.active').textContent;
+      //   var mouth = this.state.mouth && doc.querySelector('#mouth').querySelector('.active').textContent;
+      //   var day = this.state.day && doc.querySelector('#day').querySelector('.active').textContent;
+      //   mouth = mouth < 10 ? '0' + mouth : mouth; 
+      //   day = day && day < 10 ? '0' + day : day;
+      //   var time = day ? (year + '-' + mouth + '-' + day ) :( mouth ? year + '-' + mouth : year);
+      //   return time;
+      // }else{
+      //   return doc.querySelector('#year').querySelector('.active').textContent;
+      // }
+      
+    }
+    upValue(e){
+      var handler = this.props.customHandler;
+      var value = this.activeValue(e.target);
+      if(handler){
+        handler({
+          data : value,
+          eventType : 'upValue'
+        })
+      }
+      this.setState({
+        show : false
+      })
+    }
+    render(){
+      var _this = this;
+      return(
+        <div>{this.state.show && 
+          <div className='moudle-time' ref='time'>
+            <div className = 'date-time'>
+              <SaleReachCalendar 
+                mouth = {_this.state.mouth}
+                day = {_this.state.day}
+                upValue = {_this.upValue.bind(_this)}
+                show = {(e)=>{
+                  _this.toggle();
+                }}
+                y = {_this.state.year}
+              />
+            </div>
+          </div>}
+        </div>
+      )
+    }
+  }

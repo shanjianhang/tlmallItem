@@ -6,13 +6,16 @@ if(getParam("a")=="1" || getParam("firstFlag")=="true"){
 function initTags(clickButten){
 	
 	var parms = {};
-	
+	  parms.type = $("#type").text();
     var cycleType = $("#cycleType").val();
     var orderLogic = $("#orderLogic").val();
     
     var date=$("#selDay").val();
     var loginName=$("#loginName").text();
     
+  	/** 4月13添加参数loginName **/
+    parms.loginName = loginName;
+  
     if($("#branchName").text())
     	parms.branchName=$("#branchName").text();
     if($("#projectName").text())
@@ -54,8 +57,8 @@ function ajaxData_2143(parms) {
 			var rows = data.Rows;
 			var html = '<option value="" selected="selected" ></option>';
 			for(var i in rows){
-				if(rows[i].departmentId&&rows[i].department)
-				   html += '<option value="'+rows[i].departmentId+'">'+rows[i].department+'</option>';
+			if(rows[i].departmentId&&rows[i].department && rows[i].department != "电信业务事业部")
+					html += '<option value="'+rows[i].departmentId+'">'+rows[i].department+'</option>';
 			}
 			$("#departmentId").html(html);
 		},
@@ -113,9 +116,11 @@ function getLink(key,value,type){
     var bizUnitName = $("#bizUnitName").text();
     var officeName = $("#officeName").text();
     var salerName = $("#salerName").text();
+    
     var customerName = $("#customerName").text();
-    var modelName = $("#modelName").text();
-  
+    var modelName = $("#modelName").text().replace(/\+/g,'%2B');//机型
+    var storeName = $("#storeName").text();
+    
     var link = "/ptDataShow/salesAll/salesOverview";
     link += "?" + key + "=" + encodeURIComponent(value);
     link += "&type=" + type;
@@ -137,11 +142,33 @@ function getLink(key,value,type){
     	link += '&officeName=' + officeName;
     if(salerName && key!='salerName')
     	link += '&salerName=' + salerName;
-  	if(customerName && key!='customerName')
-    	link += '&customerName=' + customerName;
+    if(customerName && key!='customerName')
+    	link += '&customerName=' + encodeURIComponent(customerName);
     if(modelName && key!='modelName')
-    	link += '&modelName=' + modelName;
+    	link += '&modelName=' + encodeURIComponent(modelName);
+    if(storeName && key!='storeName')
+    	link += '&storeName=' + encodeURIComponent(storeName);
+    
     return link;
+}
+function getLinkForSearch(key,value,type){
+	if(!key || !value)
+		return '#';
+	
+	var loginName = $("#loginName").text();
+	var encoder = $("#encoder").text();
+	var cycleType = $("#cycleType").val();
+	var orderLogic = $("#orderLogic").val();
+	
+	var link = "/ptDataShow/salesAll/salesOverview";
+	link += "?" + key + "=" + encodeURIComponent(value);
+	link += "&type=" + type;
+	link += "&filter_userId=" + loginName;
+	link += '&encoder=' + encoder;
+	link += '&date=' + $("#selDay").val(); 
+	link += '&cycleType=' + cycleType;
+	link += '&orderLogic=' + orderLogic; 
+	return link;
 }
 
 
@@ -715,4 +742,167 @@ function toQfw_new(num,flag) {
 		str_num = str_num.slice(0, str_num.length - 3)
 	}
 	return first_sign + str_num + result + end_num;
+}
+
+$(function(){
+	$("#selectSearch").on("change",function(){
+		$("#searchInput").val("");
+	})
+	$("#orderLogic").on("change",function(){
+		$("#searchInput").val("");
+	})
+	$("#cycleType").on("change",function(){
+		$("#searchInput").val("");
+	})
+	//自动补全控件
+	if($('#searchInput').length>0){
+		setAutocomplete("/ptDataShow/salesAll/getSearchData",function(suggestions){
+      debugger
+	    	var selectType = $("#selectSearch").val();
+	    	if(suggestions){
+    			var suggObj = JSON.parse(suggestions.data);
+    			var link = "";
+		    	if("salerName" == selectType){
+		    		link = getLinkForSearch("salerName",suggObj.salesman_id,"07");
+		    		link += '&branchName=' + suggObj.branchName;
+		    		link += '&officeName=' + suggObj.officeName;
+		    	}else if("customerName" == selectType){
+		    		link = getLinkForSearch("customerName",suggObj.customerName,"07");
+		    		link += '&branchName=' + suggObj.branchName;
+		    		link += '&officeName=' + suggObj.officeName;
+		    		link += '&salerName=' + suggObj.salesman_id;
+		    	}else if("storeName" == selectType){
+		    		link = getLinkForSearch("storeName",suggObj.storeName,"07");
+		    		link += '&branchName=' + suggObj.branchName;
+		    		link += '&officeName=' + suggObj.officeName;
+		    		link += '&salerName=' + suggObj.salesman_id;
+		    	}
+		    	
+		    	if(link != ""){
+		    		var path = sessionStorage.getItem("path")?sessionStorage.getItem("path"):"";
+		    		if(path && path.indexOf("-") > -1){
+		    			path = path.substr(0,path.indexOf("-"))
+		    			sessionStorage.setItem("path",path);
+		    		}
+		    		window.location.href = link;
+		    	}
+	    	}
+	    });
+	}
+	
+	//当前纬度
+	setCurrentLatitudeText();
+})
+//发送ajax请求
+function setAutocomplete(service,callBack){
+	$('#searchInput').autocomplete({
+		ajaxSettings:{
+			dataType: "json",
+		},
+		getSearchParam:getSearchParam,
+		serviceUrl: service,
+	    onSelect: function(suggestion) {
+    		if(callBack){
+	    		callBack(suggestion);
+	    	}
+	    }
+	});
+	
+	function getSearchParam(){
+		var body = {};
+		body[$("#selectSearch").val()] = $("#searchInput").val();
+		body.loginName = $("#loginName").text();
+	    //body.branchName = $("#branchName").text();
+	    //body.projectName = $("#projectName").text();
+	    //body.bizUnitName = $("#bizUnitName").text();
+	    //body.officeName = $("#officeName").text();
+	    //body.salesman_id = $("#salerName").text();
+	    //body.customerName = $("#customerName").text();
+	    //body.modelName = $("#modelName").text().replace(/\+/g,'%2B');//机型
+	    //body.storeName = $("#storeName").text();
+		body.date = $("#selDay").val();
+		body.cycleType = $("#cycleType").val();
+		body.orderLogic = $("#orderLogic").val();
+		return body;
+	}
+	
+}
+
+/**
+ * 设置当前纬度
+ */
+function setCurrentLatitudeText(){
+	var text = "";
+	var branchName = $("#branchName").text();
+	if(null != branchName && "" != branchName){
+		branchName = branchName.substring(11,branchName.length);
+		text += branchName;
+	}
+	if (branchName == "太力总部") {
+		return;
+	}
+	var projectName = $("#projectName").text();
+	if(null != projectName && "" != projectName){
+		text += "-"+projectName;
+	}
+	var bizUnitName = $("#bizUnitName").text();
+	if(null != bizUnitName && "" != bizUnitName){
+		text += "-"+bizUnitName;
+	}
+	
+	var officeName = $("#officeName").text();
+	if(null != officeName && "" != officeName){
+		text += "-"+officeName;
+	}
+	var salerName = $("#salerName").text();
+	if(null != salerName && "" != salerName){
+		text += "-"+salerName;
+		$.ajax({
+			type : "POST",
+			url : "/ptDataShow//salesAll/getSalerName",
+			data : {"salesman_id":salerName},
+			dataType : "json",
+			success : function(data) {
+				if(data && data.salerName != ""){
+					text = text.replace(salerName,data.salerName);
+				}
+				
+				var customerName = $("#customerName").text();
+				if(null != customerName && "" != customerName){
+					text += "-"+customerName;
+				}
+				var storeName = $("#storeName").text();
+				if(null != storeName && "" != storeName){
+					text += "-"+storeName;
+				}
+				var modelName = $("#modelName").text();
+				if(null != modelName && "" != modelName){
+					text += "-"+modelName;
+				}
+				$(".current").show();
+				$("#currentText").html(text);
+				$("#currentText").css("max-width",($(window).width() * 0.5 - 350) + "px");
+				$("#currentText").css("font-size","17px");
+				$("#currentText").attr("title",text);
+			},
+		});
+	}else {
+		var customerName = $("#customerName").text();
+		if(null != customerName && "" != customerName){
+			text += "-"+customerName;
+		}
+		var storeName = $("#storeName").text();
+		if(null != storeName && "" != storeName){
+			text += "-"+storeName;
+		}
+		var modelName = $("#modelName").text();
+		if(null != modelName && "" != modelName){
+			text += "-"+modelName;
+		}
+		$(".current").show();
+		$("#currentText").html(text);
+		$("#currentText").css("max-width",($(window).width() * 0.5 - 350) + "px");
+		$("#currentText").css("font-size","17px");
+		$("#currentText").attr("title",text);
+	}
 }

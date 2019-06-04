@@ -119,8 +119,13 @@
           "tagName": "TR"
         },
         "userData": {
-          "data": [],
-          "force": false
+          "data": [
+            {
+              "method": "customJS",
+              "value": "return doc.querySelectorAll(\".ui-jqgrid-sdiv\")[0].querySelector(\"table\")"
+            }
+          ],
+          "force": true
         },
         "locators": [
           {
@@ -160,6 +165,7 @@
       },
       "intendedRole": "custom",
       "roles": "element,custom",
+      "ignoreVisibility": true,
       "monitored": true,
       "frameXPath": "",
       "componentType": "custom"
@@ -252,7 +258,7 @@
       "intendedRole": "custom",
       "roles": "element,custom",
       "ignoreVisibility": true,
-      "monitored": false,
+      "monitored": true,
       "frameXPath": "",
       "componentType": "custom"
     }
@@ -318,12 +324,37 @@
           "toContextId": "context91_3yemwg"
         }
       ]
+    },
+    "flow301_0uUAai": {
+      "fromContextId": "context91_3yemwg",
+      "fromAction": "doAction",
+      "fromControlId": "control116_kIDcZ0",
+      "toContexts": [
+        {
+          "toContextId": "context91_3yemwg"
+        }
+      ]
     }
   },
   "pages": {
     "page91_tsPTzG": {
       "contextId": "context91_3yemwg",
       "layout": [
+        {
+          "id": "uiControl65_OItCfI",
+          "controlId": "control89_EwPocV",
+          "display": {
+            "adapterId": "custom",
+            "type": "custom",
+            "adapter": {
+              "templateType": "react",
+              "events": {
+                "onDoAction": "doAction_uiControl65_OItCfI",
+                "onGetTemplate": "getTemplate_uiControl65_OItCfI"
+              }
+            }
+          }
+        },
         {
           "id": "uiControl99_ZsT49M",
           "controlId": "control98_UOORsI",
@@ -365,21 +396,6 @@
               "events": {
                 "onDoAction": "doAction_uiControl248_nQhTnd",
                 "onGetTemplate": "getTemplate_uiControl248_nQhTnd"
-              }
-            }
-          }
-        },
-        {
-          "id": "uiControl65_OItCfI",
-          "controlId": "control89_EwPocV",
-          "display": {
-            "adapterId": "custom",
-            "type": "custom",
-            "adapter": {
-              "templateType": "react",
-              "events": {
-                "onDoAction": "doAction_uiControl65_OItCfI",
-                "onGetTemplate": "getTemplate_uiControl65_OItCfI"
               }
             }
           }

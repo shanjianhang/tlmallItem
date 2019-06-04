@@ -634,8 +634,10 @@
             var isYear = '0';
             if ($("#planTypeSelect").val() == 'month') {
                 isYear = '0';
+                $(".filter-search").show();
             } else if ($("#planTypeSelect").val() == 'year') {
                 isYear = '1';
+                $(".filter-search").hide();
             }
 
             //面包屑导航
@@ -1829,7 +1831,19 @@
                             normal: {
                                 position: 'end',
                                 formatter: function formatter(params) {
-                                    return (params.value / days * 100).toFixed(2) + "%";
+                                   if(isYear == '1'){
+                                    	if (days && days > 0) {
+                                    		return (day / days * 100).toFixed(2) + "%";
+                                    	}else {
+                                    		return 0;
+                                    	}
+                                    }else {
+                                    	if (days && days > 0) {
+                                    		return (params.value / days * 100).toFixed(2) + "%";
+                                    	}else {
+                                    		return 0;
+                                    	}
+                                    }
                                 }
                             }
                         },

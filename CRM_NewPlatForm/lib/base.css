@@ -1377,6 +1377,8 @@ section.ysp-dialog-body-list > span:last-child > i:last-child {
 	组件 : 搜索框样式,针对客户360，门店360，带切换
 */
 #customSerchSwitch {
+  display: flex;
+  justify-content: center;
   height: 50px;
   text-align: center;
   background: #CCCCCC;
@@ -2230,15 +2232,18 @@ div.ysp-tempvisit-list-wrapper div.ysp-tempvisit-list-item > div > div:nth-child
 div.ysp-tempvisit-list-wrapper div.ysp-tempvisit-list-item:last-child {
   margin-bottom: 10%;
 }
+div.ysp-bottom-box {
+  box-shadow: 0 -1px 1px #f2f2f2;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
 div.ysp-tempvisit-list-footer {
   display: flex;
   align-items: center;
   background-color: white;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
   padding: .8rem;
-  box-shadow: 0 -1px 1px #f2f2f2;
+  border-top: solid 1px #f2f2f2;
 }
 div.ysp-tempvisit-list-footer > div:first-child {
   flex: 0 1 50%;

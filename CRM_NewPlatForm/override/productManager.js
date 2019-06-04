@@ -336,8 +336,10 @@ window.addEventListener('DOMContentLoaded', function() {
         var isYear = '0';
         if ($("#planTypeSelect").val() == 'month') {
             isYear = '0';
+            $(".filter-search").show();
         } else if ($("#planTypeSelect").val() == 'year') {
             isYear = '1';
+            $(".filter-search").hide();
         }
 
 		//面包屑导航
@@ -407,7 +409,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
                             // $("#projectRankPlaceHolder").before(rankHtml);
                             $("#projectRankPlaceHolder").before(barHtml);
-
+                              //产品销售达成
+                            if(isYear=="1" && $("#projectRankPlaceHolder tbody tr").length == 0){
+                              $("#projectRankPlaceHolder").hide();
+                            }else{
+                              $("#projectRankPlaceHolder").show();
+                            }
                             var hw_barsDatas = [{ name: "目标销量", value: rank.value.targetQty }, { name: "销量达成", value: rank.value.reachQty }, { name: "目标销售额", value: rank.value.targetAmt }, { name: "销售额达成", value: rank.value.reachAmt }];
                             getBars(hw_barsDatas, rank.value.name, "project-" + i);
                         }
@@ -1224,6 +1231,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
 	// 配置：多柱状图
 	function getBars(datas, titleText, Id) {
+      
+    	var isYear = '0';
+        if ($("#planTypeSelect").val() == 'month') {
+            isYear = '0';
+        } else if ($("#planTypeSelect").val() == 'year') {
+            isYear = '1';
+        }
 	    var chart = echarts.init(document.getElementById(Id));
 	    window.onresize = chart.resize;
 
@@ -1239,7 +1253,26 @@ window.addEventListener('DOMContentLoaded', function() {
 	    // 当月天数
 	    var day = new Date(year, month, 0);
 	    var days = day.getDate();
-
+			if (isYear == '1') {  // 年计划不显示时间轴
+        	var selYearStr = $("#selDay").val().substring(0, 4);
+        	var curYear = year;
+        	if (curYear != selYearStr) {
+                days = 0;
+            }else {
+            	days = getYearDayCount();
+            }
+        	day = Math.ceil(( new Date() - new Date(new Date().getFullYear().toString()))/(24*60*60*1000));
+        } else { // 月计划如果不是当月也不显示时间轴
+            var selYearMonthStr = $("#selDay").val().substring(0, 7);
+            var curMonthStr = month;
+            if (month < 10) {
+                curMonthStr = "0" + month;
+            }
+            var curYearMonthStr = year + "-" + curMonthStr;
+            if (curYearMonthStr != selYearMonthStr) {
+                days = 0;
+            }
+        }
 	    var option = {
 	        color: ["#43caff", '#2c81ff', '#ed9429', '#ed694f', '#ed694f'],
 	        title: {
@@ -1348,7 +1381,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	            axisLabel: {
 	                show: true
 	            },
-	            data: [""]
+	            data: [titleText]
 	        },
 	        series: [{
 	            name: '目标销量',
@@ -1508,7 +1541,19 @@ window.addEventListener('DOMContentLoaded', function() {
 	                    normal: {
 	                        position: 'end',
 	                        formatter: function formatter(params) {
-	                            return (params.value / days * 100).toFixed(2) + "%";
+	                            if(isYear == '1'){
+                                	if (days && days > 0) {
+                                		return (day / days * 100).toFixed(2) + "%";
+                                	}else {
+                                		return 0;
+                                	}
+                                }else {
+                                	if (days && days > 0) {
+                                		return (params.value / days * 100).toFixed(2) + "%";
+                                	}else {
+                                		return 0;
+                                	}
+                                }
 	                        }
 	                    }
 	                },
@@ -1625,29 +1670,33 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById("project-30").setAttribute('titleText',titleText);
       }
     
-		chart.on('click', function(params) {
-			var loginName = $("#loginName").text();
-			var encoder = $("#encoder").text();
+// 		chart.on('click', function(params) {
+// 			var loginName = $("#loginName").text();
+// 			var encoder = $("#encoder").text();
 
-			var isYear = '0';
-			if ($("#planTypeSelect").val() == 'month') {
-				isYear = '0';
-			} else if ($("#planTypeSelect").val() == 'year') {
-				isYear = '1';
-			}
-			if(isYear!='1') {
-				var link = '/ptDataShow/salesPlan/salesOverview?type=03&projectName=' + encodeURIComponent(titleText) 
-				+ '&modelName=' + encodeURIComponent($("#modelName").val()) 
-				+ "&filter_userId=" + loginName + '&encoder=' + encoder + '&date='+ $("#selDay").val() + "&drill=oneProject";
-				window.location.href = link;
-			}else{
-				var link = '/ptDataShow/salesPlan/salesOverview?type=03&projectName=' + encodeURIComponent(titleText) 
-				+ '&modelName=' + encodeURIComponent($("#modelName").val()) 
-				+ "&isYear="+isYear
-				+ "&filter_userId=" + loginName + '&encoder=' + encoder + '&date='+ $("#selDay").val() + "&drill=oneProject";
-				window.location.href = link;
-			}
-		});
+// 			var isYear = '0';
+// 			if ($("#planTypeSelect").val() == 'month') {
+// 				isYear = '0';
+// 			} else if ($("#planTypeSelect").val() == 'year') {
+// 				isYear = '1';
+// 			}
+// 			if(isYear!='1') {
+// 				var link = '/ptDataShow/salesPlan/salesOverview?type=03&projectName=' + encodeURIComponent(titleText) 
+// 				+ '&modelName=' + encodeURIComponent($("#modelName").val()) 
+// 				+ "&filter_userId=" + loginName + '&encoder=' + encoder + '&date='+ $("#selDay").val() + "&drill=oneProject";
+// 				window.location.href = link;
+// 			}else{
+// 				var link = '/ptDataShow/salesPlan/salesOverview?type=03&projectName=' + encodeURIComponent(titleText) 
+// 				+ '&modelName=' + encodeURIComponent($("#modelName").val()) 
+// 				+ "&isYear="+isYear
+// 				+ "&filter_userId=" + loginName + '&encoder=' + encoder + '&date='+ $("#selDay").val() + "&drill=oneProject";
+// 				window.location.href = link;
+// 			}
+// 		});
+      chart.on('click', function(params) {
+        var link = getLinkNew("03","projectName",titleText,"oneProject");
+              window.location.href = link;
+      });
 	}
 
 /***/ })
