@@ -158,7 +158,11 @@
       if (data.eventType == 'upValue') {
         var val = data.dataCustom;var valLength = val.length;if (4 != valLength) {
           //月度销售达成
-          var monthLength = +val.substr(5);var inputMonth = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');inputMonth.focus();elem.querySelector('div[class="datepicker-months"]').querySelector("tbody").querySelectorAll("span")[monthLength - 1].click();
+          // var monthLength = +val.substr(5);
+          // var inputMonth = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');
+          // inputMonth.focus();
+          // elem.querySelector('div[class="datepicker-months"]').querySelector("tbody").querySelectorAll("span")[monthLength - 1].click();
+          var inputMonth = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');inputMonth.focus();inputMonth.value = data.dataCustom;var queryBtnSearch = elem.ownerDocument.querySelector("#queryBtnSearch");queryBtnSearch.click();
         } else {
           //年度销售达成
           var inputYear = elem.querySelector("#searchHead").querySelector('input[name="filter_year"]');inputYear.focus();inputYear.value = data.dataCustom;var queryBtnSearch = elem.ownerDocument.querySelector("#queryBtnSearch");queryBtnSearch.click();
@@ -174,6 +178,7 @@
 
     getData_control116_kIDcZ0: function (elem) {
       "use strict";
+
       if (!elem) {
         return [];
       }if (elem) {
@@ -626,6 +631,7 @@
     },
     doAction_uiControl113_KRsmxE: function (data, elem) {
       "use strict";
+
       if (!elem) {
         return;
       }var trs = elem.querySelector("#table_list_1").querySelectorAll("tr");if (data.eventType === 'click') {
