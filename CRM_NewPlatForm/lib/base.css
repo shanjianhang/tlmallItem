@@ -17129,3 +17129,12 @@ div[data-ysp-modelid="stockInquire"] .ysp-header-edit-icon {
   height: 100vh;
 }
 /*   __客户360  5-31 lyh  基本信息滑动__   */
+div[data-ysp-modelid="businesHeadquartersDC"] {
+  min-height: 100vh;
+}
+div[data-ysp-modelid="businesHeadquartersDC"] #page {
+  margin-bottom: 106px;
+}
+div[data-ysp-modelid="businesHeadquartersDC"] #page .commonShow-page {
+  background: white;
+}
