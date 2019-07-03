@@ -16985,11 +16985,10 @@ div[data-ysp-modelid="stockInquire"] .ysp-header-edit-icon {
 .fixWrapper .fixContent {
   position: relative;
   float: left;
-  height: 100vh;
   z-index: 160;
   background: #FFFFFF;
   width: 85%;
-  height: calc(95vh);
+  height: calc(100% - 50px);
   padding: 10px 0 0 10px;
   overflow: scroll;
 }
@@ -17088,7 +17087,7 @@ div[data-ysp-modelid="stockInquire"] .ysp-header-edit-icon {
   width: 95%;
   height: 200px;
   overflow-y: scroll;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   background: #F2F2F2;
 }
 .fixWrapper .fixContent .searchRes   ul li {

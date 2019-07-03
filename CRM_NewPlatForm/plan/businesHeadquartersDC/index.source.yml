@@ -263,14 +263,18 @@ getData_control275_2EgUIJ: |
       flag: [],
       flags: []
     };
-    var a_s = elem.querySelector('#tab-head').querySelectorAll("li");
+    if($(elem).length>0 && $(elem).find("#tab-head").length>0 && $(elem).find("#tab-head").children("li").length>0){
+      var a_s = $(elem).find("#tab-head").children("li");
+      for (var i = 0; i < a_s.length; i++) {
+        var asText = a_s.eq(i)[0].textContent;
 
-    for (var i = 0; i < a_s.length; i++) {
-      var asText = a_s[i].textContent;
-
-      if (asText != '年度项目达成') {
-        if (asText.indexOf("销售报表") == -1) {
-          data.dataLabel.push([asText]);
+        if (asText != '年度项目达成') {
+          if (asText.indexOf("销售报表") == -1) {
+            data.dataLabel.push({
+              idx: a_s.eq(i).index(),
+              content: a_s.eq(i).text().trim()
+            });
+          }
         }
       }
     }
@@ -278,8 +282,8 @@ getData_control275_2EgUIJ: |
     return data;
   }
   return [];
-doAction_uiControl248_nQhTnd: "if (data.eventType == 'click') {\n  var index = +data.dataCustom.index;\n  var lis = elem.querySelector('#tab-head').querySelectorAll(\"li\");\n\tif(lis){\n    lis[index].click();\n  }\n  // if (index == 1) {\n  //   lis[2].click();\n  // } else {\n  //   lis[index].click();\n  // }\n}\n"
-getTemplate_uiControl248_nQhTnd: "import {Component} from 'react';\nimport {Overlay} from 'ysp-custom-components';\nexport default class extends Component{\n  constructor(){\n    super();\n    this.state={\n    \topen:false\n    }\n      window.addEventListener('ysp-dialog-close',this.toogleSwitch.bind(this),false)\n  }\n  componentWillUnmount(){\n  \t\twindow.removeEventListener('ysp-dialog-close',this.toogleSwitch.bind(this),false)\n  }\n  \n  toogleSwitch(){\n  \tthis.setState({\n    \topen:!this.state.open\n    })\n  }\n  render=()=>{\n    var data = this.props.customData && this.props.customData.dataLabel;\n    var flag = this.props.customData && this.props.customData.flag;\n    var flags = this.props.customData && this.props.customData.flags;\n    var _this = this;\n  \treturn (\n      <div className='.ysp-dialog-hander-op'  style={{display:this.state.open ? 'block':'none'}}>\n        <Overlay/>\n        <div className= 'ysp-dialog-hander'>\n           <ul>\n          {data && data.map((d,i)=>{  \n            return(\n                <li data-index={i} onClick={(e)=>{\n                  var target = e.target;\n                  var index = target.dataset.index;\n                  var handler = this.props.customHandler;\n                  if(handler){\n                    handler({\n                      data:{\n                        index : index,\n                        flag : flag,\n                        flags : flags\n                      },\n                      eventType:'click'\n                    });\n                  }\n                  _this.toogleSwitch();\n                  var evt = new Event('ysp-change-title');\n                  evt.title = e.target.textContent;\n                  window.dispatchEvent(evt);\n                }}>{d}</li>\n            )})}\n            </ul>\n          <button onClick={()=>{\n              _this.toogleSwitch();\n              }\n            }>取消</button>\n        </div>\n      </div>\n    )\n  }\n}"
+doAction_uiControl248_nQhTnd: "if (data.eventType == 'click') {\n  var index = +data.dataCustom.index;\n  var lis = $(elem).find(\"#tab-head\").children(\"li\");\n\tif(lis){\n    lis.eq(index)[0].click();\n  }\n  // if (index == 1) {\n  //   lis[2].click();\n  // } else {\n  //   lis[index].click();\n  // }\n}\n"
+getTemplate_uiControl248_nQhTnd: "import {Component} from 'react';\nimport {Overlay} from 'ysp-custom-components';\nexport default class extends Component{\n  constructor(){\n    super();\n    this.state={\n    \topen:false\n    }\n      window.addEventListener('ysp-dialog-close',this.toogleSwitch.bind(this),false)\n  }\n  componentWillUnmount(){\n  \t\twindow.removeEventListener('ysp-dialog-close',this.toogleSwitch.bind(this),false)\n  }\n  \n  toogleSwitch(){\n  \tthis.setState({\n    \topen:!this.state.open\n    })\n  }\n  render=()=>{\n    var data = this.props.customData && this.props.customData.dataLabel;\n    var flag = this.props.customData && this.props.customData.flag;\n    var flags = this.props.customData && this.props.customData.flags;\n    var _this = this;\n  \treturn (\n      <div className='.ysp-dialog-hander-op'  style={{display:this.state.open ? 'block':'none'}}>\n        <Overlay/>\n        <div className= 'ysp-dialog-hander'>\n           <ul>\n          {data && data.map((d,i)=>{  \n            return(\n                <li data-index={d.idx} onClick={(e)=>{\n                  var target = e.target;\n                  var index = target.dataset.index;\n                  var handler = this.props.customHandler;\n                  if(handler){\n                    handler({\n                      data:{\n                        index : index,\n                        flag : flag,\n                        flags : flags\n                      },\n                      eventType:'click'\n                    });\n                  }\n                  _this.toogleSwitch();\n                  var evt = new Event('ysp-change-title');\n                  evt.title = e.target.textContent;\n                  window.dispatchEvent(evt);\n                }}>{d.content}</li>\n            )})}\n            </ul>\n          <button onClick={()=>{\n              _this.toogleSwitch();\n              }\n            }>取消</button>\n        </div>\n      </div>\n    )\n  }\n}"
 getData_control253_wPBgTz: >
   if (!elem) {
     return;
@@ -297,18 +301,24 @@ doAction_uiControl173_btOVow: |
   if (data.eventType == 'upValue') {
     var val = data.dataCustom;
     var valLength = val.length;
-
     if (4 != valLength) {
       //月度销售达成
-      var monthLength = +val.substr(5);
-      var inputMonth = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');
-      inputMonth.focus();
-      elem.querySelector('div[class="datepicker-months"]').querySelector("tbody").querySelectorAll("span")[monthLength - 1].click();
+      // var monthLength = +val.substr(5);
+      // var inputMonth = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');
+      // inputMonth.focus();
+      // elem.querySelector('div[class="datepicker-months"]').querySelector("tbody").querySelectorAll("span")[monthLength - 1].click();
+      var inputYear = elem.querySelector("#searchHead").querySelector('input[name="filter_month"]');
+      // inputYear.focus();
+      inputYear.value = data.dataCustom;
+      elem.ownerDocument.defaultView.sessionStorage.setItem("myMonth",data.dataCustom);
+      var queryBtnSearch = elem.ownerDocument.querySelector("#queryBtnSearch");
+      queryBtnSearch.click();
     } else {
       //年度销售达成
       var inputYear = elem.querySelector("#searchHead").querySelector('input[name="filter_year"]');
-      inputYear.focus();
+      // inputYear.focus();
       inputYear.value = data.dataCustom;
+      elem.ownerDocument.defaultView.sessionStorage.setItem("myYear",data.dataCustom);
       var queryBtnSearch = elem.ownerDocument.querySelector("#queryBtnSearch");
       queryBtnSearch.click();
     } //inputMonth.value = data.dataCustom;

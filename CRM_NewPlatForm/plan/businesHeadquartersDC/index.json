@@ -387,21 +387,6 @@
       "contextId": "context91_3yemwg",
       "layout": [
         {
-          "id": "uiControl65_OItCfI",
-          "controlId": "control89_EwPocV",
-          "display": {
-            "adapterId": "custom",
-            "type": "custom",
-            "adapter": {
-              "templateType": "react",
-              "events": {
-                "onDoAction": "doAction_uiControl65_OItCfI",
-                "onGetTemplate": "getTemplate_uiControl65_OItCfI"
-              }
-            }
-          }
-        },
-        {
           "id": "uiControl99_ZsT49M",
           "controlId": "control98_UOORsI",
           "display": {
@@ -412,6 +397,21 @@
               "events": {
                 "onDoAction": "doAction_uiControl99_ZsT49M",
                 "onGetTemplate": "getTemplate_uiControl99_ZsT49M"
+              }
+            }
+          }
+        },
+        {
+          "id": "uiControl65_OItCfI",
+          "controlId": "control89_EwPocV",
+          "display": {
+            "adapterId": "custom",
+            "type": "custom",
+            "adapter": {
+              "templateType": "react",
+              "events": {
+                "onDoAction": "doAction_uiControl65_OItCfI",
+                "onGetTemplate": "getTemplate_uiControl65_OItCfI"
               }
             }
           }
